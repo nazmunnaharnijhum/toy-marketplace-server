@@ -31,6 +31,19 @@ async function run() {
 
     const toyCollection = client.db('toyMarketplace').collection('toys');
 
+    const indexKeys = {name: 1};
+    const indexOptions = {name: "title"};
+
+    const result = await toyCollection.createIndex(indexKeys, indexOptions);
+
+    app.get('/toySearchByTitle/:text',async(req, res) => {
+      const searchText = req.params.text;
+
+      const result = await toyCollection.find({ name: { $regex: searchText, $options: "i"}}).toArray()
+
+      res.send(result);
+    })
+
     app.post("/postJob", async(req, res) => {
       const body = req.body;
       const result = await toyCollection.insertOne(body);
