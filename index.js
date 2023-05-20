@@ -31,6 +31,14 @@ async function run() {
 
     const toyCollection = client.db('toyMarketplace').collection('toys');
 
+    app.post("/postJob", async(req, res) => {
+      const body = req.body;
+      const result = await toyCollection.insertOne(body);
+      
+      console.log(result);
+      res.send(result);
+    })
+
     app.get('/toys', async(req, res) =>{
         const cursor = toyCollection.find();
         const result = await cursor.limit(20).toArray();
