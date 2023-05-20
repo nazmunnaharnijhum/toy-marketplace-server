@@ -66,10 +66,46 @@ async function run() {
     })
 
     app.get('/myToys/:email', async(req, res) => {
-      console.log(req.params.email);
+      console.log(req.params.id);
       const result = await toyCollection.find({sellerEmail: req.params.email}).toArray();
       res.send(result);
     })
+
+    // app.get('/myToys/:email/:id', async(req, res) => {
+    //   const id = req.params.id;
+    //   const query = {_id: new ObjectId(id)}
+    //   const result = await toyCollection.findOne(query);
+    //   res.send(result);
+    // })
+
+    // app.patch('/myToys/:id', async(req, res) => {
+    //   const id = req.params.id;
+    //   const filter = {_id: new ObjectId(id)};
+    //   const updatedMyToys = req.body;
+    //   console.log(updatedMyToys);
+    //   const updateDoc = {
+    //     $set: {
+    //       status: 
+    //     }
+    //   }
+
+    // })
+
+    app.put("/updateToy/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      console.log(body);
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          price: body.price,
+          quantity: body.quantity,
+          details: body.details,
+        },
+      };
+      const result = await toyCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
 
     app.delete('/myToys/:id', async(req, res) => {
       const id = req.params.id;
