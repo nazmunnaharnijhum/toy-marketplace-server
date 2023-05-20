@@ -41,7 +41,7 @@ async function run() {
 
     app.get('/toys', async(req, res) =>{
         const cursor = toyCollection.find();
-        const result = await cursor.limit(20).toArray();
+        const result = await cursor.limit(20).sort({price: -1}).toArray();
         res.send(result);
     })
 
@@ -50,6 +50,12 @@ async function run() {
         const query = {_id: new ObjectId(id)}
         const result = await toyCollection.findOne(query);
         res.send(result);
+    })
+
+    app.get('/myToys/:email', async(req, res) => {
+      console.log(req.params.email);
+      const result = await toyCollection.find({sellerEmail: req.params.email}).toArray();
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
