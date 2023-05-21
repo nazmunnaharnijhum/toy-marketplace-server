@@ -67,7 +67,19 @@ async function run() {
 
     app.get('/myToys/:email', async(req, res) => {
       console.log(req.params.id);
-      const result = await toyCollection.find({sellerEmail: req.params.email}).toArray();
+      const result = await toyCollection.find({sellerEmail: req.params.email}).sort({price: -1}).toArray();
+      res.send(result);
+    })
+
+    app.get("/toys/:text", async( req, res) => {
+      console.log(req.params.text);
+      if(req.params.text=="avenger"||req.params.text=="dc"||req.params.text=="transformer"){
+        const result = await toyCollection.find({subCategory: req.params.text}).toArray();
+        console.log(result);
+        return res.send(result);
+      }
+
+      const result = await toyCollection.find({}).toArray();
       res.send(result);
     })
 
