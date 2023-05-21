@@ -54,7 +54,7 @@ async function run() {
 
     app.get('/toys', async(req, res) =>{
         const cursor = toyCollection.find();
-        const result = await cursor.limit(20).sort({price: -1}).toArray();
+        const result = await cursor.limit(20).toArray();
         res.send(result);
     })
 
