@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 // const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+// require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -68,10 +69,11 @@ const db = client.db('toyMarketplace')
 
     app.get('/toys/:id', async(req, res) => {
         const id = req.params.id;
-        const query = {_id: new ObjectId(id)}
+        const query = { _id: new ObjectId(id) };
         const result = await toyCollection.findOne(query);
         res.send(result);
     })
+   
 
     app.get('/myToys/:email', async(req, res) => {
       console.log(req.params.id);
@@ -81,17 +83,40 @@ const db = client.db('toyMarketplace')
 
 
 
-    app.get("/toys/:category", async( req, res) => {
-      console.log(req.params.category);
-      if(req.params.category=="avenger"||req.params.category=="dc"||req.params.category=="transformer"){
-        const result = await toyCollection.find({subCategory: req.params.category}).toArray();
-        console.log(result);
-        return res.send(result);
-      }
+    // app.get("/toys/:category", async( req, res) => {
+    //   console.log(req.params.category);
+    //   if(req.params.category=="avenger"||req.params.category=="dc"||req.params.category=="transformer"){
+    //     const result = await toyCollection.find({subCategory: req.params.category}).toArray();
+    //     console.log(result);
+    //     return res.send(result);
+    //   }
 
-      const result = await toyCollection.find({}).toArray();
-      res.send(result);
-    })
+    //   const result = await toyCollection.find({}).toArray();
+    //   res.send(result);
+    // })
+
+    app.get("/toys/:category", async (req, res) => {
+			const category = req.params.category;
+			console.log(category);
+
+			if (
+				category == "avenger" ||
+				category == "dc" ||
+				category == "transformer"
+			) {
+				const result = await toyCollection
+					.find({subCategory: category }).toArray();
+				console.log(result);
+				return res.send(result);
+			}
+			const result = await toyCollection
+				.find({})
+
+				.toArray();
+			res.send(result);
+		});
+		
+
 
     // app.get('/myToys/:email/:id', async(req, res) => {
     //   const id = req.params.id;
